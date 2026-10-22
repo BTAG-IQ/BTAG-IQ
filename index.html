@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BTAG-IQ Cyber Arcade Widget</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Fira Code', monospace;
+      background-color: #0d1117;
+      color: #c9d1d9;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .neon-border-cyan {
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.3), inset 0 0 10px rgba(0, 240, 255, 0.2);
+      border: 1px solid #00F0FF;
+    }
+    .neon-border-pink {
+      box-shadow: 0 0 10px rgba(255, 0, 85, 0.3), inset 0 0 10px rgba(255, 0, 85, 0.2);
+      border: 1px solid #FF0055;
+    }
+    .neon-text-cyan {
+      text-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+      color: #00F0FF;
+    }
+    .neon-text-pink {
+      text-shadow: 0 0 8px rgba(255, 0, 85, 0.8);
+      color: #FF0055;
+    }
+    .neon-text-purple {
+      text-shadow: 0 0 8px rgba(138, 43, 226, 0.8);
+      color: #a855f7;
+    }
+    .cyber-btn {
+      transition: all 0.2s ease-in-out;
+      background: rgba(22, 27, 34, 0.8);
+    }
+    .cyber-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
+    }
+    .cyber-btn:active {
+      transform: translateY(1px);
+    }
+    canvas {
+      image-rendering: pixelated;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
+
+  <!-- Main Container -->
+  <div class="w-full max-w-lg bg-[#161b22] rounded-xl border border-gray-800 p-4 shadow-2xl relative overflow-hidden">
+    
+    <!-- Background Grid Pattern Effect -->
+    <div class="absolute inset-0 opacity-5 pointer-events-none bg-[radial-gradient(#00F0FF_1px,transparent_1px)] [background-size:16px_16px]"></div>
+
+    <!-- Header / Title Bar -->
+    <div class="flex items-center justify-between border-b border-gray-800 pb-3 mb-4">
+      <div class="flex items-center space-x-2">
+        <span class="inline-block w-3 h-3 rounded-full bg-[#FF0055] animate-pulse"></span>
+        <span class="inline-block w-3 h-3 rounded-full bg-[#00F0FF]"></span>
+        <span class="inline-block w-3 h-3 rounded-full bg-[#8A2BE2]"></span>
+        <h1 class="text-xs sm:text-sm font-bold text-gray-300 ml-2 tracking-wider">BTAG-IQ // ARCADE_WIDGET</h1>
+      </div>
+      <!-- Sound Toggle Button -->
+      <button id="soundToggle" class="text-xs text-gray-400 hover:text-[#00F0FF] p-1 rounded border border-gray-800 hover:border-[#00F0FF] transition">
+        🔊 Sound: <span id="soundState" class="text-[#00F0FF]">ON</span>
+      </button>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="flex rounded-lg bg-[#0d1117] p-1 mb-4 border border-gray-800">
+      <button id="tabTicTacToe" onclick="switchGame('tictactoe')" class="flex-1 py-1.5 text-xs font-bold rounded-md transition-all neon-border-cyan text-[#00F0FF] bg-[#161b22]">
+        🎮 Tic-Tac-Toe
+      </button>
+      <button id="tabSnake" onclick="switchGame('snake')" class="flex-1 py-1.5 text-xs font-bold rounded-md transition-all text-gray-400 hover:text-white">
+        🐍 Cyber Snake
+      </button>
+    </div>
+
+    <!-- ==================== GAME 1: TIC-TAC-TOE ==================== -->
+    <div id="gameTicTacToe" class="block">
+      <!-- Game Mode Selectors & Scores -->
+      <div class="flex justify-between items-center mb-3 text-xs">
+        <div class="flex space-x-2">
+          <button id="modeAi" onclick="setTttMode('ai')" class="px-2 py-1 rounded bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]">vs AI</button>
+          <button id="modePvp" onclick="setTttMode('pvp')" class="px-2 py-1 rounded bg-gray-800 text-gray-400 border border-gray-700">2 Players</button>
+        </div>
+        <div class="text-right">
+          <span class="text-[#00F0FF] font-bold">X: <span id="scoreX">0</span></span> | 
+          <span class="text-[#FF0055] font-bold">O: <span id="scoreO">0</span></span>
+        </div>
+      </div>
+
+      <!-- Turn Status -->
+      <div id="tttStatus" class="text-center text-xs font-semibold mb-3 py-1 bg-[#0d1117] rounded border border-gray-800 text-[#00F0FF]">
+        Player X's Turn
+      </div>
+
+      <!-- Tic Tac Toe Grid -->
+      <div class="grid grid-cols-3 gap-2 bg-[#0d1117] p-2 rounded-lg border border-gray-800 aspect-square max-w-[320px] mx-auto">
+        <button onclick="makeTttMove(0)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-0"></button>
+        <button onclick="makeTttMove(1)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-1"></button>
+        <button onclick="makeTttMove(2)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-2"></button>
+        <button onclick="makeTttMove(3)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-3"></button>
+        <button onclick="makeTttMove(4)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-4"></button>
+        <button onclick="makeTttMove(5)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-5"></button>
+        <button onclick="makeTttMove(6)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-6"></button>
+        <button onclick="makeTttMove(7)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-7"></button>
+        <button onclick="makeTttMove(8)" class="ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square" id="cell-8"></button>
+      </div>
+
+      <!-- Controls -->
+      <div class="mt-3 flex justify-center">
+        <button onclick="resetTtt()" class="px-4 py-1.5 text-xs font-bold rounded-md bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF] hover:bg-[#00F0FF]/20 transition">
+          🔄 Reset Board
+        </button>
+      </div>
+    </div>
+
+    <!-- ==================== GAME 2: CYBER SNAKE ==================== -->
+    <div id="gameSnake" class="hidden">
+      <!-- Snake Status Bar -->
+      <div class="flex justify-between items-center mb-2 text-xs">
+        <div>Score: <span id="snakeScore" class="neon-text-cyan font-bold">0</span></div>
+        <div>High Score: <span id="snakeHighScore" class="neon-text-pink font-bold">0</span></div>
+      </div>
+
+      <!-- Canvas Container -->
+      <div class="relative bg-[#0d1117] rounded-lg border border-gray-800 p-1 flex justify-center items-center">
+        <canvas id="snakeCanvas" width="300" height="300" class="rounded bg-[#0d1117] max-w-full"></canvas>
+        
+        <!-- Game Over Overlay -->
+        <div id="snakeOverlay" class="absolute inset-0 bg-black/80 flex flex-col items-center justify-center rounded hidden">
+          <p class="text-[#FF0055] font-bold text-lg mb-1 neon-text-pink">SYSTEM CRASH</p>
+          <p class="text-xs text-gray-300 mb-3">Score: <span id="finalSnakeScore">0</span></p>
+          <button onclick="startSnake()" class="px-4 py-1.5 text-xs font-bold rounded bg-[#00F0FF] text-black hover:bg-[#00F0FF]/80 transition">
+            ▶ Play Again
+          </button>
+        </div>
+      </div>
+
+      <!-- Touch Controls for Mobile -->
+      <div class="mt-3 grid grid-cols-3 gap-1 max-w-[180px] mx-auto">
+        <div></div>
+        <button onclick="handleSnakeDir('UP')" class="cyber-btn py-2 rounded text-center border border-gray-800 text-[#00F0FF] font-bold">▲</button>
+        <div></div>
+        <button onclick="handleSnakeDir('LEFT')" class="cyber-btn py-2 rounded text-center border border-gray-800 text-[#00F0FF] font-bold">◄</button>
+        <button onclick="handleSnakeDir('DOWN')" class="cyber-btn py-2 rounded text-center border border-gray-800 text-[#00F0FF] font-bold">▼</button>
+        <button onclick="handleSnakeDir('RIGHT')" class="cyber-btn py-2 rounded text-center border border-gray-800 text-[#00F0FF] font-bold">►</button>
+      </div>
+    </div>
+
+    <!-- Footer Status -->
+    <div class="mt-4 pt-2 border-t border-gray-800 flex justify-between items-center text-[10px] text-gray-500">
+      <span>Built for <a href="https://bashartwaij.com" target="_blank" class="text-[#00F0FF] hover:underline">bashartwaij.com</a></span>
+      <span class="text-gray-400">GitHub: @BTAG-IQ</span>
+    </div>
+
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    /* ================= Web Audio Synthesizer ================= */
+    let soundEnabled = true;
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function initAudio() {
+      if (!audioCtx) audioCtx = new AudioContext();
+    }
+
+    document.getElementById('soundToggle').addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundState').innerText = soundEnabled ? 'ON' : 'OFF';
+      document.getElementById('soundState').className = soundEnabled ? 'text-[#00F0FF]' : 'text-gray-500';
+    });
+
+    function playSound(freq, type = 'sine', duration = 0.1) {
+      if (!soundEnabled) return;
+      try {
+        initAudio();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    /* ================= Tab Switching ================= */
+    function switchGame(game) {
+      const tabTtt = document.getElementById('tabTicTacToe');
+      const tabSnake = document.getElementById('tabSnake');
+      const viewTtt = document.getElementById('gameTicTacToe');
+      const viewSnake = document.getElementById('gameSnake');
+
+      playSound(400, 'triangle', 0.05);
+
+      if (game === 'tictactoe') {
+        tabTtt.className = "flex-1 py-1.5 text-xs font-bold rounded-md transition-all neon-border-cyan text-[#00F0FF] bg-[#161b22]";
+        tabSnake.className = "flex-1 py-1.5 text-xs font-bold rounded-md transition-all text-gray-400 hover:text-white";
+        viewTtt.classList.remove('hidden');
+        viewSnake.classList.add('hidden');
+        stopSnake();
+      } else {
+        tabSnake.className = "flex-1 py-1.5 text-xs font-bold rounded-md transition-all neon-border-pink text-[#FF0055] bg-[#161b22]";
+        tabTtt.className = "flex-1 py-1.5 text-xs font-bold rounded-md transition-all text-gray-400 hover:text-white";
+        viewSnake.classList.remove('hidden');
+        viewTtt.classList.add('hidden');
+        startSnake();
+      }
+    }
+
+    /* ================= TIC-TAC-TOE LOGIC ================= */
+    let tttBoard = ['', '', '', '', '', '', '', '', ''];
+    let tttCurrentPlayer = 'X';
+    let tttMode = 'ai'; // 'ai' or 'pvp'
+    let tttActive = true;
+    let scores = { X: 0, O: 0 };
+
+    const winCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8],
+      [0, 3, 6], [1, 4, 7], [2, 5, 8],
+      [0, 4, 8], [2, 4, 6]
+    ];
+
+    function setTttMode(mode) {
+      tttMode = mode;
+      document.getElementById('modeAi').className = mode === 'ai' ? "px-2 py-1 rounded bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]" : "px-2 py-1 rounded bg-gray-800 text-gray-400 border border-gray-700";
+      document.getElementById('modePvp').className = mode === 'pvp' ? "px-2 py-1 rounded bg-[#00F0FF]/10 text-[#00F0FF] border border-[#00F0FF]" : "px-2 py-1 rounded bg-gray-800 text-gray-400 border border-gray-700";
+      resetTtt();
+    }
+
+    function makeTttMove(index) {
+      if (tttBoard[index] !== '' || !tttActive) return;
+
+      tttBoard[index] = tttCurrentPlayer;
+      renderTttBoard();
+
+      if (tttCurrentPlayer === 'X') {
+        playSound(523, 'sine', 0.1);
+      } else {
+        playSound(330, 'square', 0.1);
+      }
+
+      if (checkTttWin(tttCurrentPlayer)) {
+        document.getElementById('tttStatus').innerText = `Player ${tttCurrentPlayer} Wins! 🎉`;
+        document.getElementById('tttStatus').className = tttCurrentPlayer === 'X' ? "text-center text-xs font-bold mb-3 py-1 bg-[#0d1117] rounded border border-[#00F0FF] neon-text-cyan" : "text-center text-xs font-bold mb-3 py-1 bg-[#0d1117] rounded border border-[#FF0055] neon-text-pink";
+        scores[tttCurrentPlayer]++;
+        updateTttScores();
+        tttActive = false;
+        playSound(880, 'sine', 0.3);
+        return;
+      }
+
+      if (tttBoard.every(cell => cell !== '')) {
+        document.getElementById('tttStatus').innerText = "It's a Draw!";
+        document.getElementById('tttStatus').className = "text-center text-xs font-bold mb-3 py-1 bg-[#0d1117] rounded border border-gray-700 text-yellow-400";
+        tttActive = false;
+        playSound(220, 'triangle', 0.2);
+        return;
+      }
+
+      tttCurrentPlayer = tttCurrentPlayer === 'X' ? 'O' : 'X';
+      document.getElementById('tttStatus').innerText = `Player ${tttCurrentPlayer}'s Turn`;
+
+      if (tttMode === 'ai' && tttCurrentPlayer === 'O' && tttActive) {
+        setTimeout(makeAiMove, 300);
+      }
+    }
+
+    function makeAiMove() {
+      // Smart AI using Minimax or simple heuristics
+      let emptyIndices = tttBoard.map((val, idx) => val === '' ? idx : null).filter(val => val !== null);
+      if (emptyIndices.length === 0 || !tttActive) return;
+
+      // Check if AI can win
+      for (let idx of emptyIndices) {
+        tttBoard[idx] = 'O';
+        if (checkTttWin('O')) {
+          tttBoard[idx] = '';
+          makeTttMove(idx);
+          return;
+        }
+        tttBoard[idx] = '';
+      }
+
+      // Block player win
+      for (let idx of emptyIndices) {
+        tttBoard[idx] = 'X';
+        if (checkTttWin('X')) {
+          tttBoard[idx] = '';
+          makeTttMove(idx);
+          return;
+        }
+        tttBoard[idx] = '';
+      }
+
+      // Pick center or random
+      let chosen = emptyIndices.includes(4) ? 4 : emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+      makeTttMove(chosen);
+    }
+
+    function checkTttWin(player) {
+      return winCombos.some(combo => combo.every(index => tttBoard[index] === player));
+    }
+
+    function renderTttBoard() {
+      tttBoard.forEach((val, idx) => {
+        const cell = document.getElementById(`cell-${idx}`);
+        cell.innerText = val;
+        if (val === 'X') {
+          cell.className = "ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-[#00F0FF] neon-text-cyan aspect-square";
+        } else if (val === 'O') {
+          cell.className = "ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-[#FF0055] neon-text-pink aspect-square";
+        } else {
+          cell.className = "ttt-cell cyber-btn rounded-lg text-3xl font-extrabold flex items-center justify-center border border-gray-800 aspect-square";
+        }
+      });
+    }
+
+    function updateTttScores() {
+      document.getElementById('scoreX').innerText = scores.X;
+      document.getElementById('scoreO').innerText = scores.O;
+    }
+
+    function resetTtt() {
+      tttBoard = ['', '', '', '', '', '', '', '', ''];
+      tttCurrentPlayer = 'X';
+      tttActive = true;
+      document.getElementById('tttStatus').innerText = "Player X's Turn";
+      document.getElementById('tttStatus').className = "text-center text-xs font-semibold mb-3 py-1 bg-[#0d1117] rounded border border-gray-800 text-[#00F0FF]";
+      renderTttBoard();
+    }
+
+    /* ================= CYBER SNAKE LOGIC ================= */
+    const canvas = document.getElementById('snakeCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridSize = 15;
+    const tileCount = 20;
+
+    let snake = [{ x: 10, y: 10 }];
+    let food = { x: 5, y: 5 };
+    let dx = 1, dy = 0;
+    let snakeScore = 0;
+    let snakeHighScore = 0;
+    let snakeGameInterval = null;
+
+    function startSnake() {
+      snake = [{ x: 10, y: 10 }];
+      dx = 1; dy = 0;
+      snakeScore = 0;
+      document.getElementById('snakeScore').innerText = snakeScore;
+      document.getElementById('snakeOverlay').classList.add('hidden');
+      spawnFood();
+      stopSnake();
+      snakeGameInterval = setInterval(updateSnake, 100);
+    }
+
+    function stopSnake() {
+      if (snakeGameInterval) clearInterval(snakeGameInterval);
+    }
+
+    function spawnFood() {
+      food.x = Math.floor(Math.random() * tileCount);
+      food.y = Math.floor(Math.random() * tileCount);
+    }
+
+    function updateSnake() {
+      const head = { x: snake[0].x + dx, y: snake[0].y + dy };
+
+      // Wall collision
+      if (head.x < 0 || head.x >= tileCount || head.y < 0 || head.y >= tileCount) {
+        gameOverSnake();
+        return;
+      }
+
+      // Self collision
+      if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+        gameOverSnake();
+        return;
+      }
+
+      snake.unshift(head);
+
+      // Food collision
+      if (head.x === food.x && head.y === food.y) {
+        snakeScore += 10;
+        document.getElementById('snakeScore').innerText = snakeScore;
+        if (snakeScore > snakeHighScore) {
+          snakeHighScore = snakeScore;
+          document.getElementById('snakeHighScore').innerText = snakeHighScore;
+        }
+        playSound(600, 'square', 0.08);
+        spawnFood();
+      } else {
+        snake.pop();
+      }
+
+      drawSnakeGame();
+    }
+
+    function drawSnakeGame() {
+      ctx.fillStyle = '#0d1117';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw Grid Lines
+      ctx.strokeStyle = '#161b22';
+      for (let i = 0; i < canvas.width; i += gridSize) {
+        ctx.beginPath();
+        ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, i); ctx.lineTo(canvas.width, i);
+        ctx.stroke();
+      }
+
+      // Draw Snake
+      snake.forEach((part, index) => {
+        ctx.fillStyle = index === 0 ? '#00F0FF' : '#8A2BE2';
+        ctx.shadowColor = index === 0 ? '#00F0FF' : '#8A2BE2';
+        ctx.shadowBlur = 8;
+        ctx.fillRect(part.x * gridSize, part.y * gridSize, gridSize - 1, gridSize - 1);
+      });
+
+      // Draw Food
+      ctx.fillStyle = '#FF0055';
+      ctx.shadowColor = '#FF0055';
+      ctx.shadowBlur = 10;
+      ctx.fillRect(food.x * gridSize, food.y * gridSize, gridSize - 1, gridSize - 1);
+      ctx.shadowBlur = 0; // reset
+    }
+
+    function gameOverSnake() {
+      stopSnake();
+      playSound(150, 'sawtooth', 0.3);
+      document.getElementById('finalSnakeScore').innerText = snakeScore;
+      document.getElementById('snakeOverlay').classList.remove('hidden');
+    }
+
+    function handleSnakeDir(dir) {
+      if (dir === 'UP' && dy === 0) { dx = 0; dy = -1; }
+      if (dir === 'DOWN' && dy === 0) { dx = 0; dy = 1; }
+      if (dir === 'LEFT' && dx === 0) { dx = -1; dy = 0; }
+      if (dir === 'RIGHT' && dx === 0) { dx = 1; dy = 0; }
+    }
+
+    // Keyboard listener for Snake
+    window.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp') handleSnakeDir('UP');
+      if (e.key === 'ArrowDown') handleSnakeDir('DOWN');
+      if (e.key === 'ArrowLeft') handleSnakeDir('LEFT');
+      if (e.key === 'ArrowRight') handleSnakeDir('RIGHT');
+    });
+
+    // Initialize initial render
+    renderTttBoard();
+  </script>
+</body>
+</html>
