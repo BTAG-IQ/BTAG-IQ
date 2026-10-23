@@ -1,11 +1,16 @@
 name: Generate Dragon Contribution Snake
 
 on:
-  # يشتغل تلقائياً كل 24 ساعة
   schedule:
     - cron: "0 0 * * *"
-  # تسمح لك بتشغيله يدوياً في أي وقت
   workflow_dispatch:
+  push:
+    branches:
+      - main
+
+# إعطاء الصلاحيات اللازمة للكتابة والرفع
+permissions:
+  contents: write
 
 jobs:
   generate:
@@ -13,7 +18,6 @@ jobs:
     timeout-minutes: 10
     
     steps:
-      # توليد التنين كـ SVG و GIF
       - name: generate-github-user-contribution-grid-snake
         uses: Platane/snk/svg-only@v3
         with:
@@ -22,14 +26,8 @@ jobs:
             dist/github-contribution-grid-snake.svg
             dist/github-contribution-grid-snake-dark.svg?palette=github-dark
 
-      # دفع الملفات إلى فرع output
       - name: push github-contribution-grid-snake.svg to the output branch
-        uses: crazy-max/ghaction-import-gpg@v6
-        ignore_working_tree: true
-        with:
-          git_config_global: true
-
-      - uses: crazy-max/ghaction-github-pages@v4
+        uses: crazy-max/ghaction-github-pages@v4
         with:
           target_branch: output
           build_dir: dist
