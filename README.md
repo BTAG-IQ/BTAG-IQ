@@ -2,13 +2,19 @@
 # 🐲 𝕭𝖆𝖘𝖍𝖆𝖗 𝕿𝖜𝖆𝖎𝖏  -[♾️֎ 🇦🇮✨ {🧠🕸️} 🛡️🎓]-
 ### AI Engineer & Vibe Coder | Cybersecurity & EdTech Architect
 <div align="center">
-
-
+  
 <!-- بطاقة عرض الداشبورد التفاعلية -->
 [![Interactive Dashboard Live](https://img.shields.io/badge/🎮_FULL_INTERACTIVE_DASHBOARD-PLAY_GAMES_%26_TERMINAL-8b5cf6?style=for-the-badge&logoColor=white)](https://btag-iq.github.io/BTAG-IQ/)
 [![Website](https://img.shields.io/badge/🌐_Visit-bashartwaij.com-10b981?style=for-the-badge)](https://bashartwaij.com)
 </div>
 ---
+<div align="center">
+
+  <a href="https://btag-iq.github.io/BTAG-IQ/">
+    <img src="dashboard.gif" alt="Bashar Twaij Interactive Dashboard" width="100%" />
+  </a>
+
+</div>
 
 ### 🛠️ Engineering Tech Stack & Tooling
 <!-- Engineering Tech Stack & Tooling -->
