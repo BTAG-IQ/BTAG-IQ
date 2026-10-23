@@ -66,7 +66,7 @@
 
 ---
 
-### 🌐 Main Ecosystem & Subdomains
+### 🌐 links 
 
 | Section / Site | Description | Direct Link |
 | :--- | :--- | :---: |
