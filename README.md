@@ -1,12 +1,3 @@
-<div align="center">
-
-<a href="https://btag-iq.github.io/BTAG-IQ/">
-  <img src="./header.svg" alt="Bashar Twaij Header" width="100%" />
-</a>
-
-</div>
-
-<div align="center">
 
 # 🤖 Bashar Twaij
 ### AI Engineer & Vibe Coder | Cybersecurity & EdTech Architect
