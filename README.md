@@ -1,8 +1,8 @@
 
-# 🤖 Bashar Twaij
+# 🐲 Bashar Twaij  -[♾️֎ 🇦🇮✨ {🧠🕸️} 🛡️🎓]-
 ### AI Engineer & Vibe Coder | Cybersecurity & EdTech Architect
 <div align="center">
- -[♾️֎ 🇦🇮✨ {🧠🕸️} 🛡️🎓]-`
+
 
 <!-- بطاقة عرض الداشبورد التفاعلية -->
 [![Interactive Dashboard Live](https://img.shields.io/badge/🎮_FULL_INTERACTIVE_DASHBOARD-PLAY_GAMES_%26_TERMINAL-8b5cf6?style=for-the-badge&logoColor=white)](https://btag-iq.github.io/BTAG-IQ/)
