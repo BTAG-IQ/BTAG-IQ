@@ -1,22 +1,21 @@
 <div align="center">
 
-# 🇦🇮✨ Bashar Twaij
+# 🤖 Bashar Twaij
 ### AI Engineer & Vibe Coder | Cybersecurity & EdTech Architect
 
-`-♾️֎ 🇦🇮✨ {🧠🕸️} 🛡️🎓]-`
+`-[♾️֎ 🇦🇮✨ {🧠🕸️} 🛡️🎓]-`
 
-[![Interactive Dashboard](https://img.shields.io/badge/🎮_Launch-Interactive_Portfolio_&_Games-8b5cf6?style=for-the-badge&logoColor=white)](https://bashartwaij.github.io/bashartwaij/)
+[![Interactive Dashboard](https://img.shields.io/badge/🎮_Launch-Interactive_Portfolio_&_Games-8b5cf6?style=for-the-badge&logoColor=white)](https://btag-iq.github.io/BTAG-IQ/)
 [![Website](https://img.shields.io/badge/🌐_Visit-bashartwaij.com-10b981?style=for-the-badge)](https://bashartwaij.com)
 
 ---
 
 ### 🐉 Dragon Activity (Contribution Grid)
 
-<!-- عرض التنين المتحرك وهو يأكل التعديلات -->
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/bashartwaij/bashartwaij/output/github-contribution-grid-snake-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/bashartwaij/bashartwaij/output/github-contribution-grid-snake.svg">
-  <img alt="github contribution dragon snake grid" src="https://raw.githubusercontent.com/bashartwaij/bashartwaij/output/github-contribution-grid-snake.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/BTAG-IQ/BTAG-IQ/output/github-contribution-grid-snake-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="https://raw.githubusercontent.com/BTAG-IQ/BTAG-IQ/output/github-contribution-grid-snake.svg">
+  <img alt="github contribution dragon snake grid" src="https://raw.githubusercontent.com/BTAG-IQ/BTAG-IQ/output/github-contribution-grid-snake.svg">
 </picture>
 
 ---
